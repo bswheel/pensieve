@@ -48,7 +48,7 @@
 <script>
 import axios from 'axios';
 export default {
-  name: 'Admin',
+  name: 'ManageMemories',
   data() {
     return {
       title: "",
@@ -75,6 +75,7 @@ export default {
     },
     async upload() {
       try {
+        debugger
         const formData = new FormData();
         formData.append('photo', this.file, this.file.name)
         let r1 = await axios.post('/api/photos', formData);

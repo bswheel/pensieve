@@ -6,10 +6,10 @@ import ManageMemories from '../views/ManageMemories.vue'
 Vue.use(VueRouter)
 
 const routes = [{
-  path: '/',
-  name: 'home',
-  component: Home
-},
+    path: '/',
+    name: 'home',
+    component: Home
+  },
   {
     path: '/manage',
     name: 'manage',
