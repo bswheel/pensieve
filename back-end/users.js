@@ -1,7 +1,8 @@
 const express = require("express");
 const mongoose = require('mongoose');
 const argon2 = require("argon2");
-
+// const memories = require("./memories.js")
+// const Memory = memories.model;
 const router = express.Router();
 
 // This is the schema. Users have usernames and passwords. We solemnly promise to
@@ -140,6 +141,61 @@ router.post('/', async (req, res) => {
         return res.sendStatus(500);
     }
 });
+
+// retrieve all users
+router.get('/all', validUser, async (req, res) => {
+    if (req.user.role !== "admin") {
+        return res.sendStatus(403);
+    }
+    let users = []
+    try {
+        if (req.user.role === "admin") {
+            users =  await User.find()
+            return res.send({users: users})
+        }
+    } catch (error) {
+        console.log(error);
+        return res.sendStatus(500);
+    }
+})
+
+// change user role
+router.put('/:username', validUser, async(req, res) => {
+    if (req.user.role !== "admin") {
+        return res.sendStatus(403);
+    }
+    try {
+        let user = await User.findOne({
+            username: req.params.username
+        });
+        user.role = req.body.role;
+        await user.save();
+        return res.send({
+            user: user
+        });
+    } catch (error) {
+        console.log(error);
+        return res.sendStatus(500);
+    }
+})
+
+// delete a user
+router.delete('/:username', validUser, async(req,res) => {
+    if (req.user.role !== "admin") {
+        return res.sendStatus(403);
+    }
+    try {
+        // let user = User.findOne({username: req.params.username})
+        // await Memory.deleteMany({user: user})
+        await User.deleteOne({
+            username: req.params.username
+        });
+        return res.sendStatus(204);
+    } catch (error) {
+        console.log(error);
+        return res.sendStatus(500);
+    }
+})
 
 // login a user
 router.post('/login', async (req, res) => {
