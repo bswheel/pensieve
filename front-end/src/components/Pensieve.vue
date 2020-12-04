@@ -4,7 +4,7 @@
 <!--      <p></p>-->
 <!--    </div>-->
     <img v-if="items.length > 0" id="pour-memory" src="/pouring-memory-pensieve.jpg" alt="pouring-memory.jpg"/>
-    <section v-if="!items.length > 0" class="image-gallery">
+    <section v-if="items.length > 0" class="image-gallery">
       <div class="image" v-for="item in items" :key="item.id">
         <h2>{{item.title}}</h2>
         <img :src="item.path" />
