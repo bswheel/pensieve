@@ -1,23 +1,74 @@
 <template>
-  <div id="app">
-    <div class="header">
-      <router-link to="/">
-        <div class="logo">
-          <img src="/ordinary.png">
+  <div class="page-container">
+      <div id="menu">
+        <div id="side1">
+          <router-link v-if="user" to="/manage" class="menu-spacing">
+            <div class="menu-item">
+              <h2>Manage Memories</h2>
+            </div>
+          </router-link>
+          <router-link v-if="user && user.role === 'admin'" to="/admin" class="menu-spacing">
+            <div class="menu-item">
+              <h2>Admin</h2>
+            </div>
+          </router-link>
+<!--          <router-link to="/about" class="menu-spacing">-->
+<!--            <div class="menu-item">-->
+<!--              <h2>About</h2>-->
+<!--            </div>-->
+<!--          </router-link>-->
         </div>
-      </router-link>
-      <div class="title">
-        <h1>Pansieve</h1>
+        <div id="brand">
+          <router-link to="/">
+            <h1 class="brand-name">Personal Pensieve</h1>
+          </router-link>
+        </div>
+        <div id="side">
+          <div class="menu-item">
+            <h2 v-if="user">Logged in as: {{user.firstName}} {{user.lastName}}
+              <button @click="logout" class="pure-button pure-button-primary">Logout</button>
+            </h2>
+          </div>
+        </div>
+      </div>
+    <div class="content-wrap">
+      <div class="content">
+        <router-view />
       </div>
     </div>
-    <div class="content">
-      <router-view />
-    </div>
     <div class="footer">
-      <router-link to="/manage">Manage Memories</router-link>
+      <hr>
+      <a href="https://github.com/bswheel/pensieve">GitHub</a>
+      <router-link v-if="user" to="/manage">Manage Memories</router-link>
+      <router-link v-if="user && user.role === 'admin'" to="/admin">Admin</router-link>
+      <a v-if="user" @click="logout">Logout</a>
     </div>
   </div>
+
 </template>
+
+<script>
+import axios from 'axios';
+export default {
+  name: 'App',
+  computed: {
+    user() {
+      return this.$root.$data.user;
+    }
+  },
+  methods: {
+    async logout() {
+      try {
+        await axios.delete("/api/users");
+        this.$root.$data.user = null;
+      } catch (error) {
+        this.$root.$data.user = null;
+      }
+    }
+  }
+}
+</script>
+
 
 <style>
 html {
@@ -27,49 +78,130 @@ html {
 body {
   font-family: 'Montserrat', sans-serif;
   font-size: 16px;
-  background: #fff;
+  background: slategrey;
   padding: 0px;
   margin: 0px;
 }
 
-/* Header */
-.header {
+.brand-name {
+  font-weight: bold;
+  font-family: "serif";
+  color: goldenrod;
+}
+
+#menu {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-column-gap: 5px;
+  grid-template-areas: "none brand side";
+  margin-bottom: 5px;
+  background-color: darkred;
+  height: 90px;
+}
+
+#menu a {
+  /*color: #B84901;*/
+}
+
+#brand {
+  grid-area: brand;
   display: flex;
-  padding: 10px 100px 0px 100px;
-  background-color: #5BDEFF;
-  color: #1C454F;
+  justify-content: center;
+  font-size: 12pt;
 }
 
-.title {
-  margin-top: 5px;
+#side {
+  grid-area: side;
+  display: flex;
+  justify-content: flex-end;
 }
 
-.title h1 {
-  font-size: 30px;
+#side img {
+  width: 50px;
 }
 
-.content {
-  padding: 20px 100px;
-  min-height: 500px;
+#side1 {
+  grid-area: none;
+  display: flex;
+  justify-content: flex-start;
 }
 
-/* Footer */
+.menu-item {
+  display: flex;
+  flex-direction: row;
+  margin-right: 2%;
+  color: goldenrod;
+  font-size: 14pt;
+}
+
+a {
+  text-decoration: None;
+  color: goldenrod;
+}
+
+a:link{
+  text-decoration: none;
+}
+
+a:visited{
+  text-decoration: none;
+}
+
+a:hover{
+  text-decoration: underline;
+  color: gold;
+}
+
+.menu-item p {
+  margin: auto;
+}
+
+.menu-item h2 {
+  margin: 10%;
+  font-size: 15pt;
+}
+
+.menu-spacing {
+  margin: 2%;
+}
+
 .footer {
-  height: 50px;
-  padding: 20px 100px 0px 100px;
-  background: #e3e3e3;
-  font-size: 12px;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  padding-bottom: 5px;
+  background-color: darkslategray;
 }
 
 .footer a {
-  color: #000;
+  padding-right: 50px;
+  color: goldenrod;
 }
 
-h1 {
-  font-size: 20px;
+.footer a:link {
+  text-decoration: none;
+  color: gold;
 }
 
-h2 {
-  font-size: 14px;
+.footer a:visited {
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+  color: gold;
+}
+
+.page-container {
+  position: relative;
+  min-height: 100vh;
+  width: 100vw;
+}
+
+.content-wrap {
+  padding-bottom: 100px;
+  width: 100%
 }
 </style>

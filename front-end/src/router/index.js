@@ -2,19 +2,25 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import ManageMemories from '../views/ManageMemories.vue'
+import Admin from '../views/Admin.vue'
 
 Vue.use(VueRouter)
 
 const routes = [{
-    path: '/',
-    name: 'home',
-    component: Home
-  },
-  {
-    path: '/manage',
-    name: 'manage',
-    component: ManageMemories
-  }
+      path: '/',
+      name: 'home',
+      component: Home
+    },
+    {
+      path: '/manage',
+      name: 'manage',
+      component: ManageMemories
+    },
+    {
+        path: '/admin',
+        name: 'admin',
+        component: Admin
+    }
 ]
 
 const router = new VueRouter({
