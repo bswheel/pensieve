@@ -9,11 +9,12 @@ const memories = require("./memories.js");
 
 const app = express();
 
-bodyParser({limit: '4MB'})
+// bodyParser({limit: '4MB'})
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({
-  extended: false
+  extended: false,
+  limit: '50mb'
 }));
 
 // connect to the database
