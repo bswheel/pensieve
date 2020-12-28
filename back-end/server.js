@@ -9,6 +9,8 @@ const memories = require("./memories.js");
 
 const app = express();
 
+bodyParser({limit: '4MB'})
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: false
